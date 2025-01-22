@@ -74,13 +74,13 @@ void free_array(int *array)
     }
 }
 
-void initialize2d_array(int **array, int n, int (*func)(int, int))
+void initialize2d_array(int **array, int n, int arg1, int arg2, int (*func)(int, int))
 {
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            array[i][j] = func(0, 10000); // Call the function and assign value
+            array[i][j] = func(arg1, arg2); // Call the function and assign value
         }
     }
 }
@@ -106,4 +106,14 @@ void print2d_array(int **array, int n)
         }
         printf("\n");
     }
+}
+
+// Function to print a 1D array
+void print_array(int *array, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
 }
