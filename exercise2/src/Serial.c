@@ -1,0 +1,151 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// returns a array NxN
+int **create2d_array(int n)
+{
+    // Alocate collums
+    int **array = malloc(n * sizeof(int *));
+    if (array == NULL)
+    {
+        fprintf(stderr, "Memory allocation failed.\n");
+        exit(1);
+    }
+
+    // alocate rows for eache collom
+    for (int i = 0; i < n; i++)
+    {
+        array[i] = malloc(n * sizeof(int));
+        if (array[i] == NULL)
+        {
+            fprintf(stderr, "Memory allocation failed for row %d.\n", i);
+            exit(1);
+        }
+    }
+
+    return array;
+}
+
+// free array NxN
+void **free2d_array(int **array, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        free(array[i]); // free row
+    }
+    free(array); // free collums
+}
+
+// claclulates the sum of a Array with n values
+int array_sum(int array[], int size)
+{
+    int sum = 0;
+    for (int i = 0; i < size; i++)
+    {
+        sum += array[i];
+    }
+    return sum;
+}
+
+// dose not anitialize array
+int *create_array(int size)
+{
+    if (size <= 0)
+    {
+        return NULL;
+    }
+
+    int *array = (int *)malloc(size * sizeof(int));
+    if (array == NULL)
+    {
+        printf("Memory allocation failed.\n");
+        return NULL;
+    }
+
+    return array;
+}
+
+void free_array(int *array)
+{
+    if (array != NULL)
+    {
+        free(array);
+    }
+}
+
+void initialize2d_array(int **array, int n, int arg1, int arg2, int (*func)(int, int))
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            array[i][j] = func(arg1, arg2); // Call the function and assign value
+        }
+    }
+}
+
+// if invalid input return -1
+int get_random_int(int a, int b)
+{
+    if (a > b)
+    {
+        return -1;
+    }
+
+    return a + rand() % (b - a + 1);
+}
+
+void print2d_array(int **array, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            printf("%d ", array[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Function to print a 1D array
+void print_array(int *array, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        return 1;
+    }
+
+    // Convert the argument to an integer
+    int n = atoi(argv[1]);
+    if (n <= 0)
+    {
+        printf("Please provide a positive integer for the size.\n");
+        return 1;
+    }
+    int **array2d = create2d_array(5);
+    int *array = create_array(n);
+
+    initialize2d_array(array2d, n, 0, 2, get_random_int);
+    printf("2d array is:\n");
+    print2d_array(array2d, n);
+
+    for (int i = 0; i < n; i++)
+    {
+        array[i] = array_sum(array2d[i], n);
+    }
+
+    printf("\nsum array is: \n");
+    print_array(array, n);
+    free2d_array(array2d, n);
+    free_array(array);
+}
